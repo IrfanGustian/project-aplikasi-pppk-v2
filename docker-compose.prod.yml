@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend-drive-nip
+      dockerfile: Dockerfile # Pastikan Dockerfile backend diubah untuk produksi
+    container_name: backend-prod-container
+    restart: always
+    env_file:
+      - ./backend-drive-nip/.env
+    expose:
+      - "5000" # Hanya expose ke jaringan internal Docker, tidak ke host
+    command: ["node", "index.js"] # Perintah produksi
+
+  frontend:
+    build:
+      context: ./frontend-nip-app
+      dockerfile: Dockerfile
+    container_name: frontend-prod-container
+    restart: always
+    ports:
+      - "80:80" # Map port 80 dari host ke Nginx di kontainer
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
