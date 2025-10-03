@@ -1,28 +1,30 @@
 version: '3.8'
+
 services:
   backend:
-    build:
-      context: ./backend-drive-nip
-      dockerfile: Dockerfile # Pastikan Dockerfile backend diubah untuk produksi
-    container_name: backend-prod-container
+    image: irfangustian/backend-drive-nip:latest
     restart: always
-    env_file:
-      - ./backend-drive-nip/.env
-    expose:
-      - "5000" # Hanya expose ke jaringan internal Docker, tidak ke host
-    command: ["node", "index.js"] # Perintah produksi
+    networks:
+      - app-network
+    # Port 3000 dari container akan di-expose ke port 3001 di VPS.
+    # Anda bisa mengakses API backend langsung via http://[IP_VPS]:3001 jika diperlukan.
+    ports:
+      - "3001:3000"
+    # Di sini Anda bisa menambahkan environment variables jika ada
+    # environment:
+    #   - DATABASE_URL=...
+    #   - JWT_SECRET=...
 
   frontend:
-    build:
-      context: ./frontend-nip-app
-      dockerfile: Dockerfile
-    container_name: frontend-prod-container
+    image: irfangustian/frontend-nip-app:latest
     restart: always
+    networks:
+      - app-network
+    # Port 80 dari container (Nginx) akan di-expose ke port 80 di VPS.
+    # Ini memungkinkan aplikasi diakses langsung via http://[IP_VPS]
     ports:
-      - "80:80" # Map port 80 dari host ke Nginx di kontainer
-    depends_on:
-      - backend
+      - "80:80"
 
 networks:
-  default:
+  app-network:
     driver: bridge
