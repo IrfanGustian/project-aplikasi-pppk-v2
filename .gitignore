@@ -1,0 +1,28 @@
+# Dependencies
+/node_modules
+/backend-drive-nip/node_modules
+/frontend-nip-app/node_modules
+
+# Build output
+/frontend-nip-app/dist
+
+# Environment variables
+.env
+backend-drive-nip/.env
+frontend-nip-app/.env
+
+# Credentials
+# IMPORTANT: Never commit service account keys or other secrets.
+service-account-key.json
+/backend-drive-nip/service-account-key.json
+
+# IDE and OS files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
