@@ -2,6 +2,9 @@ version: '3.8'
 
 services:
   backend:
+    build:
+      context: ./backend-drive-nip
+      dockerfile: Dockerfile
     image: irfangustian/backend-drive-nip:latest
     restart: always
     networks:
