@@ -59,7 +59,7 @@ const apiLimiter = rateLimit({
 
 app.get('/api/rekap', apiLimiter, async (req, res) => {
   const { nip } = req.query;
-  const GITHUB_REKAP_URL = 'https://raw.githubusercontent.com/IrfanGustian/data-download-link-pppk/refs/heads/main/hasil_rekap.json';
+  const GITHUB_REKAP_URL = `https://raw.githubusercontent.com/IrfanGustian/data-download-link-pppk/refs/heads/main/hasil_rekap.json?v=${Date.now()}`;
 
   try {
     const response = await axios.get(GITHUB_REKAP_URL, {
@@ -89,7 +89,7 @@ app.get('/api/rekap', apiLimiter, async (req, res) => {
 
 app.get('/api/rekap/:nip', apiLimiter, async (req, res) => {
     const { nip } = req.params;
-    const GITHUB_REKAP_URL = 'https://raw.githubusercontent.com/IrfanGustian/data-download-link-pppk/refs/heads/main/hasil_rekap.json';
+    const GITHUB_REKAP_URL = `https://raw.githubusercontent.com/IrfanGustian/data-download-link-pppk/refs/heads/main/hasil_rekap.json?v=${Date.now()}`;
 
     if (!nip) {
         return res.status(400).json({ message: 'NIP harus disediakan.' });
