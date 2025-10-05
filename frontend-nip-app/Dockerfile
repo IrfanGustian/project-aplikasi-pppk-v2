@@ -14,6 +14,9 @@ RUN npm audit fix
 
 COPY . .
 
+# DEBUG: List the contents of the src directory to ensure files are copied correctly
+RUN ls -lR /app/src
+
 # Jalankan build (sekarang seharusnya berhasil)
 RUN npm run build
 
