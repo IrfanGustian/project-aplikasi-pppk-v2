@@ -21,7 +21,7 @@ function App() {
 
     try {
       // Use axios directly, the response object is structured differently than fetch
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiUrl = ''; // API URL is now handled by Nginx reverse proxy
       // const response = await axios.get(`${apiUrl}/api/download-file/${nip}`);
       const response = await axios.get(`${apiUrl}/api/rekap/${nip}`);
 
