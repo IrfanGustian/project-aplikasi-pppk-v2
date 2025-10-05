@@ -51,8 +51,8 @@ const keyPath = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH;
 // const drive = google.drive({ version: 'v3', auth: jwtClient });
 
 const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
+    windowMs: 5 * 60 * 1000,
+    max: 50,
     message: 'Terlalu banyak permintaan dari IP ini, coba lagi setelah 15 menit.'
 });
 
