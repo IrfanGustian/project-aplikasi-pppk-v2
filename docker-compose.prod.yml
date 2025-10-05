@@ -16,6 +16,9 @@ services:
     #   - JWT_SECRET=...
 
   frontend:
+    build:
+      context: ./frontend-nip-app
+      dockerfile: Dockerfile
     image: irfangustian/frontend-nip-app:latest
     restart: always
     networks:
