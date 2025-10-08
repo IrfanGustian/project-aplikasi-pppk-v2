@@ -10,6 +10,12 @@ export default defineConfig({
       usePolling: true,
       interval: 1000, // Check for file changes every 1 second
     },
+    proxy: {
+      '/api': {
+        target: 'http://backend:5000',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: 'dist', // Ensure this is 'dist' or match your Dockerfile

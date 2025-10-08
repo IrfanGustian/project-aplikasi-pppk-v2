@@ -108,11 +108,16 @@ app.get('/api/rekap/:nip', apiLimiter, async (req, res) => {
         const foundData = rekapData.find(item => item.NIP === nip);
 
         if (foundData) {
+            // Defensively replace http with https to prevent any mixed content issues.
+            const secureDownloadLink1 = foundData.downloadlink1 ? foundData.downloadlink1.replace('http://', 'https://') : null;
+            const secureDownloadLink2 = foundData.downloadlink2 ? foundData.downloadlink2.replace('http://', 'https://') : null;
+            const secureDownloadLink3 = foundData.downloadlink3 ? foundData.downloadlink3.replace('http://', 'https://') : null;
+
             res.json({
                 nip: foundData.NIP,
-                downloadlink1: foundData.downloadlink1,
-                downloadlink2: foundData.downloadlink2,
-                downloadlink3: foundData.downloadlink3,
+                downloadlink1: secureDownloadLink1,
+                downloadlink2: secureDownloadLink2,
+                downloadlink3: secureDownloadLink3,
             });
         } else {
             res.status(404).json({ message: 'Data tidak ditemukan untuk NO Peserta yang dientry.' });

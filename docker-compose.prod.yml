@@ -1,44 +1,49 @@
-version: '3.8'
-
 services:
   backend:
-    build:
-      context: ./backend-drive-nip
-      dockerfile: Dockerfile
     image: irfangustian/backend-drive-nip:latest
     restart: always
     networks:
       - app-network
-      - traefik-public
+      - proxy
     expose:
       - "5000"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik-public"
-      - "traefik.http.routers.backend-api.rule=Host(`nip.domain.com`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.backend-api.entrypoints=web"
+      - "traefik.docker.network=proxy"
+      # Router untuk Backend API (HTTPS)
+      - "traefik.http.routers.backend-api-secure.rule=Host(`filepppk.spyderwick.web.id`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.backend-api-secure.tls.certresolver=myresolver"
       - "traefik.http.services.backend-api.loadbalancer.server.port=5000"
 
   frontend:
-    build:
-      context: ./frontend-nip-app
-      dockerfile: Dockerfile
     image: irfangustian/frontend-nip-app:latest
     restart: always
     networks:
       - app-network
-      - traefik-public
+      - proxy
     expose:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik-public"
-      - "traefik.http.routers.frontend-app.rule=Host(`nip.domain.com`)"
-      - "traefik.http.routers.frontend-app.entrypoints=web"
+      - "traefik.docker.network=proxy"
+      
+      # Router untuk redirect HTTP ke HTTPS
+      - "traefik.http.routers.frontend-app-http.rule=Host(`filepppk.spyderwick.web.id`)"
+      - "traefik.http.routers.frontend-app-http.entrypoints=web"
+      - "traefik.http.routers.frontend-app-http.middlewares=https-redirect"
+      
+      # Middleware untuk redirect
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      
+      # Router utama untuk Frontend App (HTTPS)
+      - "traefik.http.routers.frontend-app-secure.rule=Host(`filepppk.spyderwick.web.id`)"
+      - "traefik.http.routers.frontend-app-secure.entrypoints=websecure"
+      - "traefik.http.routers.frontend-app-secure.tls.certresolver=myresolver"
       - "traefik.http.services.frontend-app.loadbalancer.server.port=80"
 
 networks:
   app-network:
     driver: bridge
-  traefik-public:
+  proxy:
     external: true
